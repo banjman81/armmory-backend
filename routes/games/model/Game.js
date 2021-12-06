@@ -5,7 +5,7 @@ const gameSchema = new mongoose.Schema(
         title : {
             type: String
         },
-        id : {
+        gameId : {
             type: Number
         },
         thumbnail : {

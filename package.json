@@ -2,10 +2,10 @@
   "name": "armmory-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "export NODE_ENV=development && nodemon server.js"
+    "dev": "set NODE_ENV=development && nodemon server.js"
   },
   "repository": {
     "type": "git",
