@@ -1,6 +1,27 @@
-function ErrorClass(error, statusCode = 500){}
+function ErrorClass(error, statusCode = 500){
+
+    let errObj = {};
+
+    if (typeof error === "object"){
+        if (error.code) {
+            console.log("ttttttttttttttttttt")
+            return handleMongoDuplicationError(error, statusCode)
+        } else{
+            return handleMongoServerValidationError(error, statusCode)
+        }
+    }
+
+    if (typeof error === "string"){
+        errObj.statusCode = statusCode,
+        errObj.message = error
+
+        return errObj
+    }
+
+}
 
 function handleMongoServerValidationError(error){
+    console.log(error)
     let mongoErrorObj = error.errors
     let errObj = {}
 
@@ -37,6 +58,8 @@ function handleMongoServerValidationError(error){
                 break;
         }
     }
+
+    return errObj
 }
 
 function handleMongoDuplicationError(error){

@@ -1,0 +1,1 @@
+const ErrorCLass = require('./ErrorClass')
