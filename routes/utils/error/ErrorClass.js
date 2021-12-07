@@ -45,6 +45,12 @@ function handleMongoServerValidationError(error){
                 errObj.errorInfo = "You exceeded the maximum number";
                 break;
 
+            case "mix":
+                errObj.statusCode = 400;
+                errObj.message = mongoErrorObj[errName].properties.message;
+                errObj.errorInfo = "You need to be above the minimum number";
+                break;
+
             case "regexp":
                 errObj.statusCode = 500;
                 errObj.message = mongoErrorObj[errName].properties.message;
