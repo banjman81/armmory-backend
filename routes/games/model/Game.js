@@ -23,10 +23,14 @@ const gameSchema = new mongoose.Schema(
         shortDescription : {
             type: String
         },
-        user : {
+        users : {
             type : mongoose.Schema.ObjectId,
             ref: "user"
-        }
+        },
+        comments : [{
+            type : mongoose.Schema.ObjectId,
+            ref: "comment"
+        }]
     },{
         timestamps: true
     }

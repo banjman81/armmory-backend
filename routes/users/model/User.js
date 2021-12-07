@@ -43,8 +43,8 @@ const userSchema = new mongoose.Schema(
         password: {
             type: String,
             required: [true, "Please provide a password"],
-            validate: [validator.isStrongPassword, "Please provide a strong password"],
             minlength: 8,
+            validate: [validator.isStrongPassword, "Please provide a strong password"],
             trim: true,
         },
         favoriteGames: [{   
