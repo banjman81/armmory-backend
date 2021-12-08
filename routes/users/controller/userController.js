@@ -6,8 +6,11 @@ const validator = require("validator");
 const ErrorClass = require('../../utils/error/ErrorClass')
 
 async function createUser(req, res) {
+    console.log('create')
     try {
         let salt = await bcrypt.genSalt(12);
+
+        let {firstName, lastName, username, email, password} = req.body
 
         let hashedPassword = await bcrypt.hash(req.body.password, salt);
 
@@ -16,14 +19,12 @@ async function createUser(req, res) {
         }
 
         const createdUser = new User({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            role: req.body.role,
-            username: req.body.username,
-            password: req.body.password,
-            age: req.body.age,
-            phone: req.body.phone,
+            firstName,
+            lastName,
+            username,
+            email,
+            role: "user",
+            password
         });
 
         let savedUser = await createdUser.save();

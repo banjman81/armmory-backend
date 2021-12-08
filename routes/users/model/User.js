@@ -21,12 +21,6 @@ const userSchema = new mongoose.Schema(
             match: [/^[a-zA-Z0-9]*$/g, "Cannot have special characters"],
             trim: true,
         },
-        age: {
-            type: Number,
-            min: 18,
-            max: 99,
-            required: [true, "Please tell us your age!"],
-        },
         email: {
             type: String,
             required: [true, "Please provide your email"],
