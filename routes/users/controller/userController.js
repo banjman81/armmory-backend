@@ -44,7 +44,7 @@ async function login(req, res){
         if(!foundUser){
             res.status(500).json({
                 message: 'error',
-                error: "User not found, PLease sign up!"
+                error: "User not found, Please sign up!"
             })
         }else{
             let comparedPassword = await bcrypt.compare(password, foundUser.password)
