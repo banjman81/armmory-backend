@@ -1,9 +1,11 @@
 const express = require("express");
-const { createUser, login } = require("./controller/userController");
 
 const router = express.Router();
 
-router.post("/create-user", createUser);
+const {checkIsEmpty, checkIsUndefined, validateCreateData, validateLoginData, jwtMiddleware, profileUpdate} = require('../lib/index')
+const { createUser, login } = require('./controller/userController')
+
+router.post("/create-user",checkIsUndefined, checkIsEmpty, validateCreateData, createUser);
 router.post('/login', login)
 
 module.exports = router;

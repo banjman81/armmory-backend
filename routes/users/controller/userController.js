@@ -3,28 +3,23 @@ const jwt = require('jsonwebtoken')
 const User = require("../model/User");
 const validator = require("validator");
 
-const ErrorClass = require('../../utils/error/ErrorClass')
+// const ErrorHandler = require('../../utils/error/errorHandler');
+const errorHandler = require("../../utils/errorHandler");
 
 async function createUser(req, res) {
-    console.log('create')
     try {
         let salt = await bcrypt.genSalt(12);
 
         let {firstName, lastName, username, email, password} = req.body
 
-        let hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-        if(validator.isStrongPassword(req.body.password)){
-            req.body.password = hashedPassword
-        }
+        let hashedPassword = await bcrypt.hash(password, salt);
 
         const createdUser = new User({
             firstName,
             lastName,
             username,
             email,
-            role: "user",
-            password
+            password : hashedPassword
         });
 
         let savedUser = await createdUser.save();
@@ -36,8 +31,8 @@ async function createUser(req, res) {
     } catch (err) {
         // res.status(500).json({ message: "error", err });
         return res.status(500).json({
-            message : "error",
-            error : ErrorClass(err)
+            message : "error1",
+            error : errorHandler(err)
         });
     }
 }
