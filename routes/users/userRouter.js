@@ -6,6 +6,6 @@ const {checkIsEmpty, checkIsUndefined, validateCreateData, validateLoginData, jw
 const { createUser, login } = require('./controller/userController')
 
 router.post("/create-user",checkIsUndefined, checkIsEmpty, validateCreateData, createUser);
-router.post('/login', login)
+router.post('/login', checkIsUndefined, checkIsEmpty, validateLoginData, login)
 
 module.exports = router;
