@@ -73,12 +73,39 @@ async function login(req, res){
     }catch(err){
         res.status(500).json({
             message: "error",
-            error: err.message
+            error: errorHandler(err)
+        })
+    }
+}
+
+async function getUserByEmail(req, res){
+    try{
+        let foundUser = await User.findOne({email: req.params.email})
+        if(!foundUser){
+            res.status(500).json({
+                message: 'error',
+                error: "User not found, Please sign up!"
+            })
+        }else{
+            res.json({
+                firstName: foundUser.firstName,
+                lastname: foundUser.lastName,
+                username: foundUser.username,
+                email: foundUser.email,
+                role: foundUser.role
+            })
+        }
+
+    }catch(err){
+        res.status(500).json({
+            message: "error",
+            error: errorHandler(err)
         })
     }
 }
 
 module.exports = {
     createUser,
-    login
+    login,
+    getUserByEmail
 };
