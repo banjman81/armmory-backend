@@ -89,7 +89,7 @@ async function getUserByEmail(req, res){
         }else{
             res.json({
                 firstName: foundUser.firstName,
-                lastname: foundUser.lastName,
+                lastName: foundUser.lastName,
                 username: foundUser.username,
                 email: foundUser.email,
                 role: foundUser.role
