@@ -3,15 +3,14 @@ const mongoose = require('mongoose')
 const commentSchema = new mongoose.Schema(
     {
         content : {
-            type : String
+            type : String,
         },
         user : {
             type : mongoose.Schema.ObjectId,
             ref: "user"
         },
         gameId : {
-            type : mongoose.Schema.ObjectId,
-            ref: "game"
+            type : Number
         }
     },
     {

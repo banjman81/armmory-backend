@@ -1,28 +1,71 @@
 const Game = require('../../games/model/Game')
-const User = require('../../comments/model/Comment')
+const Comment = require('../../comments/model/Comment')
+const User = require('../../users/model/User')
 
 async function createComment(req, res){
     let {comment, id} = req.body
 
-    const foundUser = await User.findOne({email: req.user.email})
-
-    // const foundGame = await Game.findOne({gameId: id})
-
+    const foundUser = await User.findOne({username: req.user.username})
+    
     try{
-        console.log(req.user.email)
-        res.json({
-            message: "success",
-            payload: foundUser
-        })
+        if(comment.length > 0){
+            if(comment.length > 10){
+                const createdComment = new Comment({
+                    content: comment,
+                    user : foundUser._id,
+                    gameId : id
+                })
+
+                let savedComment = await createdComment.save()
+
+                foundUser.comments.push(savedComment._id)
+
+                await foundUser.save()
+                res.json({
+                    message: "success",
+                    payload: createdComment,
+                })
+            }else{
+                res.status(500).json({
+                    message : "error",
+                    error : "Comment is too short"
+                })
+            }
+        }else{
+            res.status(500).json({
+                message : "error",
+                error : "Comment cannot be empty"
+            })
+        }
+        
     }catch(e){
-        res.status(500).josn({
+        res.status(500).json({
             message : "error",
             error : e.message
         })
     }
+    
+    
 
+}
+
+async function findComment(req, res){
+    let foundCommets = await Comment.find({gameId : req.params.gameId}).populate({path: "user", select: "username"})
+    try{
+        res.json({
+            message: 'success',
+            payload : foundCommets
+        })
+
+    }catch(err){
+        res.status(500).json({
+            message: "error1",
+            error: err.message
+        })
+    }
 }
 
 module.exports = {
     createComment,
+    findComment
 }
