@@ -5,26 +5,26 @@ const User = require('../../users/model/User')
 async function createComment(req, res){
     let {comment, id} = req.body
 
-    const foundUser = await User.findOne({username: req.user.username})
-    console.log(req.headers)
+    const decodedData = res.locals.decodedData
+    const foundUser = await User.findOne({email: decodedData.email})
     
     try{
         if(comment.length > 0){
             if(comment.length > 10){
-                // const createdComment = new Comment({
-                //     content: comment,
-                //     user : foundUser._id,
-                //     gameId : id
-                // })
+                const createdComment = new Comment({
+                    content: comment,
+                    user : foundUser._id,
+                    gameId : id
+                })
 
-                // let savedComment = await createdComment.save()
+                let savedComment = await createdComment.save()
 
-                // foundUser.comments.push(savedComment._id)
+                foundUser.comments.push(savedComment._id)
 
-                // await foundUser.save()
+                await foundUser.save()
                 res.json({
                     message: "success",
-                    // payload: 'createdComment',
+                    payload: 'createdComment',
                 })
             }else{
                 res.status(500).json({

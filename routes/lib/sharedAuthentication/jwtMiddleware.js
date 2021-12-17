@@ -1,16 +1,15 @@
 const jwt = require('jsonwebtoken');
 
 function jwtMiddleware(req, res, next) {
-    console.log('jwtmid')
     try {
-
+        
         if (req.headers && req.headers.authorization) {
             
             let notDecodedToken = req.headers.authorization;
 
             let slicedToken = notDecodedToken.slice(7);
 
-            let decodedToken = jwt.verify(slicedToken, process.env.JWT_SECRET);
+            let decodedToken = jwt.verify(slicedToken, process.env.JWT_USER_SECRET);
 
             res.locals.decodedData = decodedToken;
             

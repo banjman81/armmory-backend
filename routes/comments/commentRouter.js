@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const passport = require('passport')
+const {jwtMiddleware} = require('../lib/sharedAuthentication/jwtMiddleware')
 
 const {createComment, findComment} =  require('./controllers/commentController')
 
-router.post('/add-comment', passport.authenticate("listingUser", {session : false}), createComment)
+router.post('/add-comment', jwtMiddleware, createComment)
 router.get('/find-comment/:gameId', findComment)
 
 module.exports = router
