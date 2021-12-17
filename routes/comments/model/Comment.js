@@ -10,7 +10,8 @@ const commentSchema = new mongoose.Schema(
             ref: "user"
         },
         gameId : {
-            type : Number
+            type : mongoose.Schema.ObjectId,
+            ref: "game"
         }
     },
     {

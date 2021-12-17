@@ -4,7 +4,7 @@ const User = require('../../users/model/User')
 async function createGame(req, res){
     try{
         let {title, gameId, thumbnail, platform,genre, publisher, shortDescription} = req.body
-        const foundUser = await User.findOne({email: req.user.email})
+        const foundUser = await User.findOne({email: req.user.email}).populate("favoriteGames")
 
         const createdGame = new Game({
             title,
@@ -17,13 +17,24 @@ async function createGame(req, res){
             user : req.user.id
         })
 
-        let savedGame = await createdGame.save()
+        const filteredGame = foundUser.favoriteGames.filter(game => 
+            game.gameId == gameId)
+        if(filteredGame.length > 0){
+            res.status(500).json({
+                message: "error",
+                error: "Games is already favorite"
+            })
+        }else{
+            let savedGame = await createdGame.save()
 
-        foundUser.favoriteGames.push(savedGame._id)
+            foundUser.favoriteGames.push(savedGame._id)
 
-        await foundUser.save()
+            await foundUser.save()
 
-        res.json({message: " success", payload : savedGame})
+            res.json({message: " success"})
+        }
+
+        
 
     }catch(err){
         res.status(500).json({ message: "error", error: err.message });
@@ -69,8 +80,26 @@ async function removeGame(req, res){
     }
 }
 
+async function getFavorites(req, res){
+    try{
+        const foundUser = await User.findOne({email: req.user.email}).populate("favoriteGames")
+
+        res.json({
+            message: "success",
+            payload: foundUser.favoriteGames
+        })
+
+    }catch(e){
+        res.status(500).json({
+            message: "error",
+            error: e.message
+        })
+    }
+}
+
 
 module.exports = {
     createGame,
-    removeGame
+    removeGame,
+    getFavorites
 }

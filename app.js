@@ -9,6 +9,7 @@ const app = express();
 const indexRouter = require('./routes/index')
 const userRouter = require("./routes/users/userRouter")
 const gameRouter = require("./routes/games/gamesRouter")
+const commentRouter = require('./routes/comments/commentRouter')
 
 const userJWTLoginStrategy = require('./routes/lib/passport/user-passport');
 
@@ -29,5 +30,6 @@ passport.use("listingUser", userJWTLoginStrategy)
 app.use('/', indexRouter)
 app.use("/api/users", userRouter)
 app.use('/api/games', gameRouter)
+app.use('/api/comments', commentRouter)
 
 module.exports = app
