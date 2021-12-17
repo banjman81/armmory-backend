@@ -11,9 +11,11 @@ jwtOpts.secretOrKey = keys;
 
 var userJWTLoginStrategy = new JwtStrategy(jwtOpts, async (payload, done) => {
     var userEmail = payload.email;
+
     
     try{
         if(userEmail){
+            // console.log(userEmail)
             let user = await User.findOne({ email: userEmail }).select("-password -__v");
 
             if(!user || user === null) {

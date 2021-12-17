@@ -6,24 +6,25 @@ async function createComment(req, res){
     let {comment, id} = req.body
 
     const foundUser = await User.findOne({username: req.user.username})
+    console.log(req.headers)
     
     try{
         if(comment.length > 0){
             if(comment.length > 10){
-                const createdComment = new Comment({
-                    content: comment,
-                    user : foundUser._id,
-                    gameId : id
-                })
+                // const createdComment = new Comment({
+                //     content: comment,
+                //     user : foundUser._id,
+                //     gameId : id
+                // })
 
-                let savedComment = await createdComment.save()
+                // let savedComment = await createdComment.save()
 
-                foundUser.comments.push(savedComment._id)
+                // foundUser.comments.push(savedComment._id)
 
-                await foundUser.save()
+                // await foundUser.save()
                 res.json({
                     message: "success",
-                    payload: createdComment,
+                    // payload: 'createdComment',
                 })
             }else{
                 res.status(500).json({
@@ -51,6 +52,7 @@ async function createComment(req, res){
 
 async function findComment(req, res){
     let foundCommets = await Comment.find({gameId : req.params.gameId}).populate({path: "user", select: "username"})
+    
     try{
         res.json({
             message: 'success',
