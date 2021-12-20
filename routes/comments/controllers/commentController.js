@@ -67,7 +67,52 @@ async function findComment(req, res){
     }
 }
 
+async function deleteComment(req, res){
+    try{
+        const decodedData = res.locals.decodedData
+
+        const foundUser = await User.findOne({email: decodedData.email})
+
+        console.log(req.params.id)
+
+        let foundComment = await Comment.findById(req.params.id)
+        console.log(foundComment)
+        
+        if(foundComment === null){
+            res.status(500).json({
+                message: "error",
+                error: 'comment id not found'
+            })
+
+        }else{
+
+            const removedComment = await Comment.findByIdAndDelete(foundComment._id)
+            const filteredComment = foundUser.comments.filter(item => item._id.toString() !== removedComment._id.toString())
+
+            foundUser.comments = filteredComment
+
+            await foundUser.save()
+                res.json({
+                message: "success",
+                payload: removedComment
+        })
+        }
+
+        
+
+        
+    }catch(e){
+        res.status(500).json({
+            message: "error",
+            error: e.message
+        })
+    }
+    
+
+}
+
 module.exports = {
     createComment,
-    findComment
+    findComment,
+    deleteComment
 }
