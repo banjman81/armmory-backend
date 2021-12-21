@@ -14,7 +14,7 @@ async function createGame(req, res){
             genre,
             publisher,
             shortDescription,
-            user : req.user.id
+            users : req.user.id
         })
 
         const filteredGame = foundUser.favoriteGames.filter(game => 

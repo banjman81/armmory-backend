@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken')
 const User = require("../model/User");
 const validator = require("validator");
+const Comment = require('../../comments/model/Comment')
+const Game = require('../../games/model/Game')
 
 // const ErrorHandler = require('../../utils/error/errorHandler');
 const errorHandler = require("../../utils/errorHandler");
@@ -104,8 +106,96 @@ async function getUserByEmail(req, res){
     }
 }
 
+async function profileUpdate(req, res){
+    try{
+        let salt = await bcrypt.genSalt(12);
+
+        let {password} = req.body
+
+        let hashedPassword = await bcrypt.hash(password, salt);
+
+        req.body.password = hashedPassword
+        const decodedData = res.locals.decodedData
+
+        let foundUser = await User.findOne({email : decodedData.email})
+
+        let updatedUser = await User.findByIdAndUpdate(foundUser._id, req.body, {new: true})
+        console.log(req.body.password)
+        res.json({
+            message : "success",
+            payload: updatedUser
+        })
+    }catch(err){
+        res.status(500).json({
+            message: "error",
+            error: errorHandler(err)
+        })
+    }
+}
+
+async function deleteUser(req, res){
+    try{
+        const decodedData = res.locals.decodedData
+
+        let foundUser = await User.findOne({email : decodedData.email})
+
+        let foundGames = await Game.find()
+        let filteredGames = foundGames.filter(game => game.users.toString() === foundUser._id.toString())
+
+        filteredGames.map(game =>{
+            deleteGame(game._id)
+        })
+
+        let foundComments = await Comment.find()
+        let filteredComments = foundComments.filter(comment => comment.user.toString() === foundUser._id.toString())
+
+        let deletedUser = await User.findByIdAndDelete(foundUser._id)
+
+        filteredComments.map(comment => {
+            deleteComment(comment._id)
+        })
+
+        res.json({
+            message: "success",
+            payload: foundUser
+        })
+
+    }catch(err){
+        res.status(500).json({
+            message: "error",
+            error: errorHandler(err)
+        })
+    }
+}
+
+async function deleteGame(id){
+    try{
+        return await Game.findByIdAndDelete(id)
+
+    }catch(err){
+        res.status(500).json({
+            message: "error",
+            error: errorHandler(err)
+        })
+    }
+}
+
+async function deleteComment(id){
+    try{
+        return await Comment.findByIdAndDelete(id)
+
+    }catch(err){
+        res.status(500).json({
+            message: "error",
+            error: errorHandler(err)
+        })
+    }
+}
+
 module.exports = {
     createUser,
     login,
-    getUserByEmail
+    getUserByEmail,
+    profileUpdate,
+    deleteUser
 };
