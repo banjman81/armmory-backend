@@ -13,6 +13,10 @@ const commentRouter = require('./routes/comments/commentRouter')
 
 const userJWTLoginStrategy = require('./routes/lib/passport/user-passport');
 
+app.use((request, response, next) => {
+    response.header("Access-Contril-Allow-Origin", "*");
+    next()
+})
 app.use(cors());
 app.options("*", cors());
 
@@ -27,7 +31,7 @@ app.use(cookieParser());
 app.use(passport.initialize())
 passport.use("listingUser", userJWTLoginStrategy)
 
-app.use('/', indexRouter)
+app.use('/api/', indexRouter)
 app.use("/api/users", userRouter)
 app.use('/api/games', gameRouter)
 app.use('/api/comments', commentRouter)
