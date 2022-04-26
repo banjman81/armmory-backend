@@ -14,7 +14,7 @@ const commentRouter = require('./routes/comments/commentRouter')
 const userJWTLoginStrategy = require('./routes/lib/passport/user-passport');
 
 app.use((request, response, next) => {
-    response.header("Access-Contril-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Origin", "*");
     next()
 })
 app.use(cors());
