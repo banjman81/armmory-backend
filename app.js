@@ -13,12 +13,12 @@ const commentRouter = require('./routes/comments/commentRouter')
 
 const userJWTLoginStrategy = require('./routes/lib/passport/user-passport');
 
-app.use((request, response, next) => {
-    response.header("Access-Control-Allow-Origin", "*");
-    next()
-})
+// app.use((request, response, next) => {
+//     response.header("Access-Control-Allow-Origin", "*");
+//     next()
+// })
 app.use(cors());
-app.options("*", cors());
+// app.options("*", cors());
 
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
