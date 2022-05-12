@@ -18,7 +18,7 @@ const userJWTLoginStrategy = require('./routes/lib/passport/user-passport');
 //     next()
 // })
 app.use(cors());
-// app.options("*", cors());
+app.options("*", cors());
 
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
